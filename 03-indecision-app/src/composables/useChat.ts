@@ -10,24 +10,7 @@ const translateAnswer = {
 };
 
 export const useChat = () => {
-  const messages = ref<ChatMessage[]>([
-    {
-      id: new Date().getTime(),
-      message: 'Hola',
-      itsMine: true,
-    },
-    {
-      id: new Date().getTime() + 1,
-      message: '¿Quieres ir a tomar café?',
-      itsMine: true,
-    },
-    {
-      id: new Date().getTime() + 2,
-      message: 'Si',
-      itsMine: false,
-      image: 'https://imgv3.fotor.com/images/share/fotor-ai-generate-a-lifelike-dragon.jpg',
-    },
-  ]);
+  const messages = ref<ChatMessage[]>([]);
 
   const onMessage = async (text: string) => {
     if (text.length === 0) return;
