@@ -11,7 +11,7 @@
       </div>
 
       <div class="border-t border-blue-500 pt-2">
-        <slot name="footer"/>
+        <slot name="footer" />
       </div>
     </div>
   </dialog>

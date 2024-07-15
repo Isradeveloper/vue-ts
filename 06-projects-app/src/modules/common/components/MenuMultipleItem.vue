@@ -1,7 +1,10 @@
 <template>
   <li>
     <details open>
-      <summary>{{ value }}</summary>
+      <summary v-if="url">
+        <RouterLink :to="url">{{ value }}</RouterLink>
+      </summary>
+      <summary v-else>{{ value }}</summary>
       <ul>
         <slot />
       </ul>
@@ -12,6 +15,7 @@
 <script lang="ts" setup>
 interface Props {
   value: string;
+  url?: string;
 }
 
 defineProps<Props>();

@@ -15,7 +15,7 @@
           />
           <!-- if there is a button in form, it will close the modal -->
           <div class="flex justify-end mt-5">
-            <button class="btn mr-4" @click="closeModal">Cerrar</button>
+            <button type="button" class="btn mr-4" @click="closeModal">Cerrar</button>
             <button class="btn btn-primary" type="submit">Aceptar</button>
           </div>
         </form>
@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 interface Props {
   open: boolean;
@@ -44,9 +44,15 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emits = defineEmits<{
   close: [void];
-  open: [void];
   value: [text: string];
 }>();
+
+watch(props, (newProps) => {
+  if (newProps.open === true) {
+    inputRef.value?.focus();
+    return;
+  }
+});
 
 const inputValue = ref('');
 const inputRef = ref<HTMLInputElement | null>(null);
