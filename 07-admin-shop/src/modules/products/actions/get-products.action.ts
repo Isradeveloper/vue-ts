@@ -1,7 +1,8 @@
 import { tesloApi } from '@/api/tesloApi';
 import type { Product } from '../interfaces/products.interface';
+import { getProductImageAction } from './get-product-image.action';
 
-export const getProducts = async (page: number = 1, limit: number = 10) => {
+export const getProductsAction = async (page: number = 1, limit: number = 10) => {
   try {
     const { data } = await tesloApi.get<Product[]>('/products', {
       params: {
@@ -10,9 +11,11 @@ export const getProducts = async (page: number = 1, limit: number = 10) => {
       },
     });
 
-    console.log(data);
-
-    return data;
+    return data.map((product) => ({
+      ...product,
+      images: product.images.map(getProductImageAction),
+    }));
+    
   } catch (error) {
     console.log(error);
     throw new Error('Error getting products');
