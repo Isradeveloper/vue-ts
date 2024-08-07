@@ -9,6 +9,7 @@
         id="email"
         name="email"
         v-model="myForm.email"
+        ref="emailInputRef"
         class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
         autocomplete="off"
       />
@@ -21,6 +22,7 @@
         id="password"
         name="password"
         v-model="myForm.password"
+        ref="passwordInputRef"
         class="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
         autocomplete="off"
       />
@@ -55,12 +57,14 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive } from 'vue';
-import { useRouter } from 'vue-router';
+import { reactive, ref, watchEffect } from 'vue';
 import { useAuthStore } from '../stores/auth.store';
+import { useToast } from 'vue-toastification';
 
-const router = useRouter();
 const authStore = useAuthStore();
+const toast = useToast();
+const emailInputRef = ref<HTMLInputElement | null>(null);
+const passwordInputRef = ref<HTMLInputElement | null>(null);
 
 const myForm = reactive({
   email: '',
@@ -69,7 +73,32 @@ const myForm = reactive({
 });
 
 const onLogin = async () => {
+  if (myForm.email === '') {
+    return emailInputRef.value?.focus();
+  }
+
+  if (myForm.password === '' || myForm.password.length < 3) {
+    return passwordInputRef.value?.focus();
+  }
+
+  if (myForm.rememberMe) {
+    localStorage.setItem('email', myForm.email);
+  } else {
+    localStorage.removeItem('email');
+  }
+
   const ok = await authStore.login(myForm.email, myForm.password);
-  console.log(ok);
+
+  if (ok) return;
+
+  toast.error('Usuario o contraseña no son correctos');
 };
+
+watchEffect(() => {
+  const email = localStorage.getItem('email');
+  if (email) {
+    myForm.email = email;
+    myForm.rememberMe = true;
+  }
+});
 </script>
