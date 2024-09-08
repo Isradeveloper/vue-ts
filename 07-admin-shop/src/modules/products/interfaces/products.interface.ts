@@ -10,7 +10,7 @@ export interface Product {
   sizes: Size[];
   gender: string;
   tags: String[];
-  images: string[];
+  images: (string|File)[];
   user: User;
 }
 

@@ -5,6 +5,7 @@
     <a href="#">
       <div class="relative flex items-end overflow-hidden rounded-xl">
         <img
+          v-if="typeof props.product.images[0] === 'string'"
           :src="props.product.images[0]"
           :alt="props.product.title"
           class="h-[250px] object-cover"

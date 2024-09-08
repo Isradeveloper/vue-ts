@@ -1,8 +1,6 @@
-import CustomInput from '@/modules/common/components/CustomInput.vue'; import CustomTextArea from
-'@/modules/common/components/CustomTextArea.vue';
 <template>
   <div class="bg-white px-5 py-2 rounded">
-    <h1 class="text-3xl">Producto: <small class="text-blue-500">nombre</small></h1>
+    <h1 class="text-3xl">Producto: <small class="text-blue-500">{{title || 'Nuevo producto'}}</small></h1>
     <hr class="my-4" />
   </div>
 
@@ -82,8 +80,13 @@ import CustomInput from '@/modules/common/components/CustomInput.vue'; import Cu
       <label for="stock" class="form-label">Imágenes</label>
       <!-- Row with scrollable horizontal -->
       <div class="flex p-2 overflow-x-auto space-x-8 w-full h-[265px] bg-gray-200 rounded">
+
         <div v-for="(image, index) of images" :key="image.value" class="flex-shrink-0">
           <img :src="image.value" :alt="`${index}`" class="w-[250px] h-[250px]" />
+        </div>
+
+        <div v-for="(imageFile, index) of imageFiles" :key="imageFile.name" class="flex-shrink-0">
+          <img :src="temporalImageUrl(imageFile)" :alt="`${index}`" class="w-[250px] h-[250px]" />
         </div>
       </div>
 
@@ -91,7 +94,7 @@ import CustomInput from '@/modules/common/components/CustomInput.vue'; import Cu
       <div class="col-span-2 my-2">
         <label for="image" class="form-label">Subir imagen</label>
 
-        <input multiple type="file" id="image" class="form-control" />
+        <input multiple type="file" id="image" class="form-control" accept="image/*" @change="onFileChanged"/>
       </div>
 
       <div class="mb-4">
@@ -109,7 +112,8 @@ import CustomInput from '@/modules/common/components/CustomInput.vue'; import Cu
       <div class="my-4 text-right">
         <button
           type="submit"
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          class="disabled:bg-gray-300 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          :disabled="isPending"
         >
           Guardar
         </button>
